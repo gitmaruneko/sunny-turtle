@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>祈晴燒烏龜 Deluxe</title>
+  <title>祈晴燒烏龜</title>
   <style>
     * { box-sizing: border-box; }
     body {
@@ -86,13 +86,57 @@
       50% { box-shadow: 0 0 45px rgba(255,219,77,.95), 0 0 95px rgba(255,219,77,.48); }
     }
     .rainbow {
-      position: absolute; left: 50%; transform: translateX(-50%) scale(0.7); bottom: 95px;
-      width: 330px; height: 165px; opacity: 0; transition: all .9s cubic-bezier(.2,1.3,.4,1);
-      z-index: 2; border-radius: 330px 330px 0 0;
-      background: conic-gradient(from 270deg at 50% 100%, #ff7b7b 0deg 22deg, #ffb347 22deg 44deg, #ffe066 44deg 66deg, #8be28b 66deg 88deg, #7db8ff 88deg 110deg, #b190ff 110deg 132deg, transparent 132deg 228deg, #ff7b7b 228deg 250deg, #ffb347 250deg 272deg, #ffe066 272deg 294deg, #8be28b 294deg 316deg, #7db8ff 316deg 338deg, #b190ff 338deg 360deg);
-      clip-path: inset(0 0 50% 0); filter: drop-shadow(0 8px 8px rgba(0,0,0,0.08));
+      position: absolute;
+      left: 50%;
+      bottom: 88px;
+      width: 380px;
+      height: 200px;
+      opacity: 0;
+      transform: translateX(-50%) scale(0.72);
+      transition: all .9s cubic-bezier(.2,1.3,.4,1);
+      z-index: 2;
+      pointer-events: none;
+      filter: drop-shadow(0 8px 8px rgba(0,0,0,0.08));
+      overflow: hidden;
     }
-    .rainbow.show { opacity: .9; transform: translateX(-50%) scale(1); }
+
+    .rainbow.show {
+      opacity: .95;
+      transform: translateX(-50%) scale(1);
+    }
+
+    .rainbow .arc {
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      border-style: solid;
+      border-bottom: 0;
+      border-radius: 999px 999px 0 0;
+      background: transparent;
+    }
+
+    .rainbow .arc1 { width: 360px; height: 180px; border-width: 18px; border-color: #ff7b7b; }
+    .rainbow .arc2 { width: 324px; height: 162px; border-width: 18px; border-color: #ffb347; }
+    .rainbow .arc3 { width: 288px; height: 144px; border-width: 18px; border-color: #ffe066; }
+    .rainbow .arc4 { width: 252px; height: 126px; border-width: 18px; border-color: #8be28b; }
+    .rainbow .arc5 { width: 216px; height: 108px; border-width: 18px; border-color: #7db8ff; }
+    .rainbow .arc6 { width: 180px; height: 90px; border-width: 18px; border-color: #b190ff; }
+
+    @media (max-width: 640px) {
+      .rainbow {
+        width: 320px;
+        height: 170px;
+        bottom: 92px;
+      }
+
+      .rainbow .arc1 { width: 300px; height: 150px; border-width: 15px; }
+      .rainbow .arc2 { width: 270px; height: 135px; border-width: 15px; }
+      .rainbow .arc3 { width: 240px; height: 120px; border-width: 15px; }
+      .rainbow .arc4 { width: 210px; height: 105px; border-width: 15px; }
+      .rainbow .arc5 { width: 180px; height: 90px; border-width: 15px; }
+      .rainbow .arc6 { width: 150px; height: 75px; border-width: 15px; }
+    }
     .turtle-area {
       position: absolute; left: 20px; right: 20px; bottom: 105px; top: 90px;
       display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-end;
@@ -141,8 +185,8 @@
   <div class="sky-effects" id="skyEffects"></div>
   <div class="confetti-layer" id="confettiLayer"></div>
   <div class="container">
-    <h1>祈晴燒烏龜☀️🐢🔥</h1>
-    <div class="subtitle">最近一直暴雨，只好用可愛魔法祈求好天氣！</div>
+    <h1>祈晴燒烏龜 ☀️🐢🔥</h1>
+    <div class="subtitle">最近一直下雨，只好用可愛魔法祈求好天氣！</div>
     <div class="panel">
       <div class="controls">
         <label for="turtleCount">要燒幾隻烏龜：</label>
@@ -155,12 +199,19 @@
     </div>
     <div class="stage" id="stage">
       <div class="sun" id="sun">☀️</div>
-      <div class="rainbow" id="rainbow"></div>
+      <div class="rainbow" id="rainbow">
+        <div class="arc arc1"></div>
+        <div class="arc arc2"></div>
+        <div class="arc arc3"></div>
+        <div class="arc arc4"></div>
+        <div class="arc arc5"></div>
+        <div class="arc arc6"></div>
+      </div>
       <div class="turtle-area" id="turtleArea"></div>
       <div class="ground"></div>
     </div>
     <div class="wish" id="wishText"></div>
-    <div class="footer-note">純屬趣味, 可愛版演出、無血腥內容</div>
+    <div class="footer-note">純屬趣味，可愛版演出、無血腥內容</div>
   </div>
   <script>
     const turtleArea = document.getElementById("turtleArea");
