@@ -3,448 +3,146 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>祈晴燒烏龜</title>
+  <title>祈晴燒烏龜 Deluxe</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: "Microsoft JhengHei", "PingFang TC", sans-serif;
       min-height: 100vh;
-      background: linear-gradient(to bottom, #b9e3ff 0%, #dff4ff 45%, #fff7e8 100%);
+      background: linear-gradient(to bottom, #9ed8ff 0%, #dff5ff 45%, #fff1cc 100%);
       overflow-x: hidden;
       color: #4b5563;
     }
-
-    .rain {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      overflow: hidden;
-      z-index: 0;
+    .rain, .sky-effects, .confetti-layer {
+      position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0;
     }
-
     .drop {
-      position: absolute;
-      top: -20px;
-      width: 2px;
-      height: 18px;
-      background: rgba(255,255,255,0.75);
-      border-radius: 999px;
+      position: absolute; top: -20px; width: 2px; height: 18px;
+      background: rgba(255,255,255,0.75); border-radius: 999px;
       animation: rainFall linear infinite;
     }
-
-    @keyframes rainFall {
-      to {
-        transform: translateY(110vh);
-      }
+    @keyframes rainFall { to { transform: translateY(110vh); } }
+    .floating-emoji {
+      position: absolute; font-size: 24px; opacity: 0.85;
+      animation: floatAround 7s ease-in-out infinite;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
     }
-
-    .container {
-      position: relative;
-      z-index: 1;
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 32px 20px 48px;
-      text-align: center;
+    @keyframes floatAround {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-24px) rotate(8deg); }
     }
-
+    .container { position: relative; z-index: 1; max-width: 1000px; margin: 0 auto; padding: 32px 20px 48px; text-align: center; }
     h1 {
-      margin: 12px 0 8px;
-      font-size: clamp(32px, 5vw, 52px);
-      color: #ff7b7b;
-      text-shadow: 0 2px 0 rgba(255,255,255,0.7);
+      margin: 12px 0 8px; font-size: clamp(32px, 5vw, 54px); color: #ff7474;
+      text-shadow: 0 3px 0 rgba(255,255,255,0.8); animation: titleBounce 2.2s ease-in-out infinite;
     }
-
-    .subtitle {
-      font-size: 16px;
-      margin-bottom: 24px;
-      color: #6b7280;
-    }
-
+    @keyframes titleBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
+    .subtitle { font-size: 16px; margin-bottom: 24px; color: #6b7280; }
     .panel {
-      background: rgba(255,255,255,0.82);
-      backdrop-filter: blur(8px);
-      border: 2px solid #ffffff;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.08);
-      border-radius: 24px;
-      padding: 20px;
-      margin-bottom: 24px;
+      background: rgba(255,255,255,0.86); backdrop-filter: blur(8px); border: 2px solid #ffffff;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.08); border-radius: 24px; padding: 20px; margin-bottom: 24px;
     }
-
-    .controls {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px;
-      align-items: center;
-    }
-
-    .controls label {
-      font-size: 16px;
-      font-weight: 700;
-      color: #374151;
-    }
-
+    .controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; align-items: center; }
+    .controls label { font-size: 16px; font-weight: 700; color: #374151; }
     .controls input {
-      width: 90px;
-      padding: 10px 12px;
-      font-size: 18px;
-      border-radius: 14px;
-      border: 2px solid #ffd5d5;
-      outline: none;
-      text-align: center;
-      background: #fffdfd;
+      width: 90px; padding: 10px 12px; font-size: 18px; border-radius: 14px;
+      border: 2px solid #ffd5d5; outline: none; text-align: center; background: #fffdfd;
     }
-
     .controls button {
-      padding: 12px 20px;
-      font-size: 16px;
-      font-weight: 700;
-      border: none;
-      border-radius: 999px;
-      cursor: pointer;
-      transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.2s;
+      padding: 12px 20px; font-size: 16px; font-weight: 700; border: none; border-radius: 999px;
+      cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.2s;
       box-shadow: 0 6px 16px rgba(255, 132, 132, 0.25);
     }
-
-    .start-btn {
-      background: linear-gradient(135deg, #ff9a9e, #ffb86c);
-      color: white;
-    }
-
-    .reset-btn {
-      background: #ffffff;
-      color: #ff7b7b;
-      border: 2px solid #ffd3d3;
-    }
-
-    .controls button:hover {
-      transform: translateY(-2px);
-    }
-
-    .controls button:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    .status {
-      margin-top: 14px;
-      font-size: 17px;
-      font-weight: 700;
-      color: #6366f1;
-      min-height: 26px;
-    }
-
+    .start-btn { background: linear-gradient(135deg, #ff9a9e, #ffb86c); color: white; }
+    .reset-btn { background: #ffffff; color: #ff7b7b; border: 2px solid #ffd3d3; }
+    .controls button:hover { transform: translateY(-2px); }
+    .controls button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .status { margin-top: 14px; font-size: 17px; font-weight: 700; color: #6366f1; min-height: 26px; }
+    .sound-note { margin-top: 8px; font-size: 13px; color: #94a3b8; }
     .stage {
-      position: relative;
-      min-height: 430px;
-      border-radius: 28px;
-      overflow: hidden;
+      position: relative; min-height: 460px; border-radius: 28px; overflow: hidden;
       background:
-        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.85), rgba(255,255,255,0) 18%),
-        radial-gradient(circle at 80% 18%, rgba(255,255,255,0.85), rgba(255,255,255,0) 16%),
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.88), rgba(255,255,255,0) 18%),
+        radial-gradient(circle at 80% 18%, rgba(255,255,255,0.88), rgba(255,255,255,0) 16%),
         linear-gradient(to bottom, #ccecff 0%, #eaf8ff 65%, #eaffd9 65%, #c8f6b7 100%);
       border: 3px solid rgba(255,255,255,0.85);
       box-shadow: inset 0 0 0 1px rgba(255,255,255,0.35), 0 18px 30px rgba(0,0,0,0.08);
     }
-
-    .ground {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 100px;
-      background: linear-gradient(to top, #99df85, #bdf0a7);
-    }
-
+    .stage.sunny { animation: sunnyGlow 1.4s ease forwards; }
+    @keyframes sunnyGlow { 0%{filter:brightness(1)} 70%{filter:brightness(1.18)} 100%{filter:brightness(1.08)} }
+    .ground { position: absolute; left: 0; right: 0; bottom: 0; height: 100px; background: linear-gradient(to top, #99df85, #bdf0a7); z-index: 1; }
     .sun {
-      position: absolute;
-      top: 28px;
-      right: 42px;
-      width: 92px;
-      height: 92px;
-      border-radius: 50%;
+      position: absolute; top: 28px; right: 42px; width: 98px; height: 98px; border-radius: 50%;
       background: radial-gradient(circle at 35% 35%, #fff8b8, #ffd84d 70%);
-      box-shadow: 0 0 35px rgba(255, 219, 77, 0.75);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 36px;
-      opacity: 0;
-      transform: scale(0.7);
-      transition: all 0.8s ease;
-      z-index: 2;
+      box-shadow: 0 0 0 rgba(255, 219, 77, 0), 0 0 35px rgba(255, 219, 77, 0.75);
+      display: flex; align-items: center; justify-content: center; font-size: 38px;
+      opacity: 0; transform: scale(0.5) rotate(-20deg);
+      transition: all 0.9s cubic-bezier(.2,1.4,.3,1); z-index: 4;
     }
-
-    .sun.show {
-      opacity: 1;
-      transform: scale(1);
+    .sun.show { opacity: 1; transform: scale(1) rotate(0deg); animation: sunPulse 1.8s ease-in-out infinite; }
+    @keyframes sunPulse {
+      0%,100% { box-shadow: 0 0 25px rgba(255,219,77,.65), 0 0 55px rgba(255,219,77,.38); }
+      50% { box-shadow: 0 0 45px rgba(255,219,77,.95), 0 0 95px rgba(255,219,77,.48); }
     }
-
     .rainbow {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: 95px;
-      width: 280px;
-      height: 140px;
-      border-top-left-radius: 160px;
-      border-top-right-radius: 160px;
-      border: 12px solid transparent;
-      border-bottom: 0;
-      opacity: 0;
-      transition: opacity 0.8s ease;
-      background:
-        linear-gradient(to right,
-          #ff7b7b 0%, #ff7b7b 16.6%,
-          #ffb347 16.6%, #ffb347 33.2%,
-          #ffe066 33.2%, #ffe066 49.8%,
-          #8be28b 49.8%, #8be28b 66.4%,
-          #7db8ff 66.4%, #7db8ff 83%,
-          #b190ff 83%, #b190ff 100%);
-      clip-path: ellipse(50% 50% at 50% 100%);
-      z-index: 1;
+      position: absolute; left: 50%; transform: translateX(-50%) scale(0.7); bottom: 95px;
+      width: 330px; height: 165px; opacity: 0; transition: all .9s cubic-bezier(.2,1.3,.4,1);
+      z-index: 2; border-radius: 330px 330px 0 0;
+      background: conic-gradient(from 270deg at 50% 100%, #ff7b7b 0deg 22deg, #ffb347 22deg 44deg, #ffe066 44deg 66deg, #8be28b 66deg 88deg, #7db8ff 88deg 110deg, #b190ff 110deg 132deg, transparent 132deg 228deg, #ff7b7b 228deg 250deg, #ffb347 250deg 272deg, #ffe066 272deg 294deg, #8be28b 294deg 316deg, #7db8ff 316deg 338deg, #b190ff 338deg 360deg);
+      clip-path: inset(0 0 50% 0); filter: drop-shadow(0 8px 8px rgba(0,0,0,0.08));
     }
-
-    .rainbow.show {
-      opacity: 0.9;
-    }
-
+    .rainbow.show { opacity: .9; transform: translateX(-50%) scale(1); }
     .turtle-area {
-      position: absolute;
-      left: 20px;
-      right: 20px;
-      bottom: 105px;
-      top: 90px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: flex-end;
-      gap: 16px;
-      padding: 8px 10px 20px;
-      z-index: 3;
+      position: absolute; left: 20px; right: 20px; bottom: 105px; top: 90px;
+      display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-end;
+      gap: 16px; padding: 8px 10px 20px; z-index: 5;
     }
-
-    .turtle-wrap {
-      position: relative;
-      width: 110px;
-      height: 105px;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      animation: floaty 2.4s ease-in-out infinite;
-    }
-
-    .turtle-wrap:nth-child(2n) {
-      animation-delay: 0.2s;
-    }
-
-    .turtle-wrap:nth-child(3n) {
-      animation-delay: 0.45s;
-    }
-
-    @keyframes floaty {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-6px); }
-    }
-
-    .turtle {
-      position: relative;
-      width: 90px;
-      height: 58px;
-    }
-
-    .shell {
-      position: absolute;
-      left: 18px;
-      top: 12px;
-      width: 50px;
-      height: 34px;
-      background: #77c66e;
-      border: 3px solid #4f9150;
-      border-radius: 50% 50% 45% 45%;
-      box-shadow: inset 0 0 0 4px rgba(255,255,255,0.12);
-    }
-
-    .shell::before,
-    .shell::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-    }
-
-    .shell::before {
-      background:
-        radial-gradient(circle at 50% 40%, transparent 0 8px, #5da85c 8px 10px, transparent 10px),
-        linear-gradient(90deg, transparent 0 32%, #5da85c 32% 36%, transparent 36% 64%, #5da85c 64% 68%, transparent 68%),
-        linear-gradient(0deg, transparent 0 35%, #5da85c 35% 39%, transparent 39% 61%, #5da85c 61% 65%, transparent 65%);
-      opacity: 0.8;
-    }
-
-    .head {
-      position: absolute;
-      right: 6px;
-      top: 19px;
-      width: 23px;
-      height: 20px;
-      background: #a5dc8d;
-      border: 3px solid #4f9150;
-      border-radius: 50%;
-    }
-
-    .eye {
-      position: absolute;
-      width: 3px;
-      height: 3px;
-      background: #2c3e50;
-      border-radius: 50%;
-      top: 7px;
-    }
-
-    .eye.left { left: 6px; }
-    .eye.right { right: 6px; }
-
-    .blush {
-      position: absolute;
-      width: 6px;
-      height: 4px;
-      background: #ffb4b4;
-      border-radius: 50%;
-      bottom: 3px;
-      opacity: 0.9;
-    }
-
-    .blush.left { left: 4px; }
-    .blush.right { right: 4px; }
-
-    .leg {
-      position: absolute;
-      width: 12px;
-      height: 10px;
-      background: #a5dc8d;
-      border: 2px solid #4f9150;
-      border-radius: 50%;
-      bottom: 3px;
-    }
-
-    .leg.lf { left: 18px; }
-    .leg.rf { left: 48px; }
-    .leg.lb { left: 24px; bottom: -2px; }
-    .leg.rb { left: 52px; bottom: -2px; }
-
-    .tail {
-      position: absolute;
-      left: 8px;
-      top: 31px;
-      width: 10px;
-      height: 10px;
-      border-left: 3px solid #4f9150;
-      border-bottom: 3px solid #4f9150;
-      transform: rotate(45deg);
-      border-radius: 3px;
-    }
-
-    .flame {
-      position: absolute;
-      bottom: 2px;
-      font-size: 22px;
-      opacity: 0;
-      transform: translateY(5px) scale(0.7);
-      transition: all 0.25s ease;
-      filter: drop-shadow(0 3px 4px rgba(255, 150, 64, 0.35));
-    }
-
-    .turtle-wrap.burning .flame {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-      animation: flicker 0.5s ease-in-out infinite alternate;
-    }
-
-    @keyframes flicker {
-      from { transform: translateY(0) scale(1); }
-      to { transform: translateY(-3px) scale(1.08); }
-    }
-
-    .turtle-wrap.burning .turtle {
-      animation: shake 0.35s ease-in-out 3;
-    }
-
-    @keyframes shake {
-      0% { transform: rotate(0deg); }
-      25% { transform: rotate(-4deg); }
-      50% { transform: rotate(4deg); }
-      75% { transform: rotate(-3deg); }
-      100% { transform: rotate(0deg); }
-    }
-
-    .poof {
-      position: absolute;
-      font-size: 28px;
-      opacity: 0;
-      transform: scale(0.5);
-      pointer-events: none;
-    }
-
-    .turtle-wrap.gone .turtle,
-    .turtle-wrap.gone .flame {
-      opacity: 0;
-      transition: opacity 0.25s ease;
-    }
-
-    .turtle-wrap.gone .poof {
-      opacity: 1;
-      transform: scale(1.2);
-      transition: all 0.35s ease;
-      animation: poofUp 0.8s ease forwards;
-    }
-
-    @keyframes poofUp {
-      0% { opacity: 1; transform: translateY(0) scale(0.9); }
-      100% { opacity: 0; transform: translateY(-22px) scale(1.4); }
-    }
-
-    .wish {
-      margin-top: 18px;
-      font-size: 20px;
-      font-weight: 800;
-      color: #ff8a65;
-      min-height: 34px;
-    }
-
-    .footer-note {
-      margin-top: 12px;
-      font-size: 13px;
-      color: #94a3b8;
-    }
-
-    @media (max-width: 640px) {
-      .turtle-wrap {
-        width: 90px;
-        height: 92px;
-      }
-
-      .turtle {
-        transform: scale(0.9);
-      }
-
-      .stage {
-        min-height: 500px;
-      }
-    }
+    .turtle-wrap { position: relative; width: 110px; height: 105px; display: flex; align-items: flex-end; justify-content: center; animation: floaty 2.4s ease-in-out infinite; }
+    .turtle-wrap:nth-child(2n){animation-delay:.2s} .turtle-wrap:nth-child(3n){animation-delay:.45s}
+    @keyframes floaty { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+    .turtle { position: relative; width: 90px; height: 58px; transition: transform .25s ease, opacity .25s ease; }
+    .shell { position: absolute; left: 18px; top: 12px; width: 50px; height: 34px; background: #77c66e; border: 3px solid #4f9150; border-radius: 50% 50% 45% 45%; box-shadow: inset 0 0 0 4px rgba(255,255,255,.12); }
+    .shell::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: radial-gradient(circle at 50% 40%, transparent 0 8px, #5da85c 8px 10px, transparent 10px), linear-gradient(90deg, transparent 0 32%, #5da85c 32% 36%, transparent 36% 64%, #5da85c 64% 68%, transparent 68%), linear-gradient(0deg, transparent 0 35%, #5da85c 35% 39%, transparent 39% 61%, #5da85c 61% 65%, transparent 65%); opacity: .8; }
+    .head { position: absolute; right: 6px; top: 19px; width: 23px; height: 20px; background: #a5dc8d; border: 3px solid #4f9150; border-radius: 50%; }
+    .eye { position: absolute; width: 3px; height: 3px; background: #2c3e50; border-radius: 50%; top: 7px; }
+    .eye.left{left:6px} .eye.right{right:6px}
+    .blush { position: absolute; width: 6px; height: 4px; background: #ffb4b4; border-radius: 50%; bottom: 3px; opacity: .9; }
+    .blush.left{left:4px} .blush.right{right:4px}
+    .leg { position: absolute; width: 12px; height: 10px; background: #a5dc8d; border: 2px solid #4f9150; border-radius: 50%; bottom: 3px; }
+    .leg.lf{left:18px}.leg.rf{left:48px}.leg.lb{left:24px;bottom:-2px}.leg.rb{left:52px;bottom:-2px}
+    .tail { position: absolute; left: 8px; top: 31px; width: 10px; height: 10px; border-left: 3px solid #4f9150; border-bottom: 3px solid #4f9150; transform: rotate(45deg); border-radius: 3px; }
+    .flame { position: absolute; bottom: 2px; font-size: 24px; opacity: 0; transform: translateY(6px) scale(.7); transition: all .25s ease; filter: drop-shadow(0 3px 4px rgba(255,150,64,.35)); }
+    .magic-ring { position: absolute; bottom: 5px; width: 72px; height: 20px; border-radius: 50%; border: 3px dashed rgba(255,214,102,.9); opacity: 0; transform: scale(.4); }
+    .turtle-wrap.burning .flame { opacity: 1; transform: translateY(0) scale(1); animation: flicker .45s ease-in-out infinite alternate; }
+    .turtle-wrap.burning .magic-ring { opacity: 1; animation: ringSpin .75s linear infinite; }
+    @keyframes flicker { from{transform:translateY(0) scale(1)} to{transform:translateY(-4px) scale(1.12)} }
+    @keyframes ringSpin { from{transform:scale(.9) rotate(0deg)} to{transform:scale(1.08) rotate(360deg)} }
+    .turtle-wrap.burning .turtle { animation: shake .3s ease-in-out 4; }
+    @keyframes shake { 0%{transform:rotate(0)}25%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}75%{transform:rotate(-4deg)}100%{transform:rotate(0)} }
+    .poof { position: absolute; font-size: 32px; opacity: 0; transform: scale(.5); pointer-events: none; }
+    .star-burst { position: absolute; width: 100px; height: 100px; pointer-events: none; opacity: 0; }
+    .star-burst span { position: absolute; left: 50%; top: 50%; font-size: 18px; transform: translate(-50%, -50%); animation: starFly .8s ease forwards; }
+    @keyframes starFly { 0%{opacity:1;transform:translate(-50%,-50%) scale(.2)} 100%{opacity:0;transform:translate(var(--x),var(--y)) scale(1.1)} }
+    .turtle-wrap.gone .turtle, .turtle-wrap.gone .flame, .turtle-wrap.gone .magic-ring { opacity: 0; transition: opacity .25s ease; }
+    .turtle-wrap.gone .poof { opacity: 1; transform: scale(1.2); transition: all .35s ease; animation: poofUp .9s ease forwards; }
+    @keyframes poofUp { 0%{opacity:1;transform:translateY(0) scale(.9)} 100%{opacity:0;transform:translateY(-28px) scale(1.5)} }
+    .wish { margin-top: 18px; font-size: 22px; font-weight: 900; color: #ff8a65; min-height: 38px; text-shadow: 0 2px 0 rgba(255,255,255,.8); }
+    .wish.pop { animation: wishPop .8s cubic-bezier(.2,1.4,.3,1); }
+    @keyframes wishPop { 0%{transform:scale(.5);opacity:0}80%{transform:scale(1.12);opacity:1}100%{transform:scale(1);opacity:1} }
+    .footer-note { margin-top: 12px; font-size: 13px; color: #94a3b8; }
+    .confetti { position: fixed; top: -20px; font-size: 20px; animation: confettiFall 2.8s ease-in forwards; z-index: 20; }
+    @keyframes confettiFall { 0%{transform:translateY(-20px) rotate(0);opacity:1} 100%{transform:translateY(110vh) rotate(360deg);opacity:0} }
+    @media (max-width:640px){ .turtle-wrap{width:90px;height:92px}.turtle{transform:scale(.9)}.stage{min-height:520px} }
   </style>
 </head>
 <body>
   <div class="rain" id="rain"></div>
-
+  <div class="sky-effects" id="skyEffects"></div>
+  <div class="confetti-layer" id="confettiLayer"></div>
   <div class="container">
-    <h1>祈晴燒烏龜 ☀️🐢🔥</h1>
-    <div class="subtitle">最近一直下雨，只好可愛地祈求好天氣！</div>
-
+    <h1>祈晴燒烏龜 Deluxe ☀️🐢🔥</h1>
+    <div class="subtitle">最近一直下雨，只好用可愛魔法祈求好天氣！</div>
     <div class="panel">
       <div class="controls">
         <label for="turtleCount">要燒幾隻烏龜：</label>
@@ -453,19 +151,17 @@
         <button class="reset-btn" id="resetBtn">重來一次</button>
       </div>
       <div class="status" id="status">輸入數量後按下「開始祈晴」</div>
+      <div class="sound-note">🔊 音效會在按下按鈕後啟動，不需要額外音檔</div>
     </div>
-
-    <div class="stage">
+    <div class="stage" id="stage">
       <div class="sun" id="sun">☀️</div>
       <div class="rainbow" id="rainbow"></div>
       <div class="turtle-area" id="turtleArea"></div>
       <div class="ground"></div>
     </div>
-
     <div class="wish" id="wishText"></div>
     <div class="footer-note">純屬趣味祈晴小網站，可愛版演出、無血腥內容</div>
   </div>
-
   <script>
     const turtleArea = document.getElementById("turtleArea");
     const startBtn = document.getElementById("startBtn");
@@ -476,126 +172,104 @@
     const sun = document.getElementById("sun");
     const rainbow = document.getElementById("rainbow");
     const rain = document.getElementById("rain");
-
+    const stage = document.getElementById("stage");
+    const skyEffects = document.getElementById("skyEffects");
+    const confettiLayer = document.getElementById("confettiLayer");
     let isRunning = false;
-
-    function createRain() {
+    let audioCtx = null;
+    function initAudio(){ if(!audioCtx){ audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } if(audioCtx.state === "suspended") audioCtx.resume(); }
+    function playTone(freq, duration, type="sine", volume=0.08, delay=0){
+      if(!audioCtx) return;
+      const start = audioCtx.currentTime + delay;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type; osc.frequency.setValueAtTime(freq, start);
+      gain.gain.setValueAtTime(0.0001, start);
+      gain.gain.exponentialRampToValueAtTime(volume, start + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+      osc.connect(gain); gain.connect(audioCtx.destination);
+      osc.start(start); osc.stop(start + duration + 0.03);
+    }
+    function playStartSound(){ playTone(523.25,.12,"sine",.07,0); playTone(659.25,.12,"sine",.07,.12); playTone(783.99,.18,"sine",.07,.24); }
+    function playBurnSound(){ playTone(196,.08,"triangle",.045,0); playTone(392,.12,"sine",.055,.06); playTone(740,.08,"square",.025,.13); }
+    function playPoofSound(){ playTone(880,.08,"sine",.055,0); playTone(1174.66,.12,"sine",.05,.06); }
+    function playSuccessSound(){ [523.25,659.25,783.99,1046.5,1174.66,1046.5].forEach((n,i)=>playTone(n,.15,"sine",.07,i*.12)); }
+    function createRain(){
       rain.innerHTML = "";
-      for (let i = 0; i < 70; i++) {
-        const drop = document.createElement("div");
-        drop.className = "drop";
-        drop.style.left = Math.random() * 100 + "vw";
-        drop.style.animationDuration = (0.7 + Math.random() * 0.9) + "s";
-        drop.style.animationDelay = (Math.random() * 1.5) + "s";
-        drop.style.opacity = 0.35 + Math.random() * 0.5;
-        drop.style.height = (10 + Math.random() * 18) + "px";
+      for(let i=0;i<75;i++){
+        const drop = document.createElement("div"); drop.className = "drop";
+        drop.style.left = Math.random()*100 + "vw";
+        drop.style.animationDuration = (0.7 + Math.random()*0.9) + "s";
+        drop.style.animationDelay = (Math.random()*1.5) + "s";
+        drop.style.opacity = 0.35 + Math.random()*0.5;
+        drop.style.height = (10 + Math.random()*18) + "px";
         rain.appendChild(drop);
       }
     }
-
-    function createTurtle() {
-      const wrap = document.createElement("div");
-      wrap.className = "turtle-wrap";
-      wrap.innerHTML = `
-        <div class="flame">🔥</div>
-        <div class="poof">☁️✨</div>
-        <div class="turtle">
-          <div class="shell"></div>
-          <div class="head">
-            <div class="eye left"></div>
-            <div class="eye right"></div>
-            <div class="blush left"></div>
-            <div class="blush right"></div>
-          </div>
-          <div class="leg lf"></div>
-          <div class="leg rf"></div>
-          <div class="leg lb"></div>
-          <div class="leg rb"></div>
-          <div class="tail"></div>
-        </div>
-      `;
+    function createSkyEffects(sunny=false){
+      skyEffects.innerHTML = "";
+      const emojis = sunny ? ["☀️","🌈","✨","🌤️"] : ["☁️","🌧️","💧","✨"];
+      for(let i=0;i<14;i++){
+        const e = document.createElement("div"); e.className = "floating-emoji"; e.textContent = emojis[i % emojis.length];
+        e.style.left = Math.random()*95 + "vw"; e.style.top = Math.random()*65 + "vh";
+        e.style.animationDelay = Math.random()*4 + "s"; e.style.animationDuration = (5 + Math.random()*5) + "s";
+        skyEffects.appendChild(e);
+      }
+    }
+    function createTurtle(){
+      const wrap = document.createElement("div"); wrap.className = "turtle-wrap";
+      wrap.innerHTML = `<div class="magic-ring"></div><div class="flame">🔥</div><div class="poof">☁️✨</div><div class="star-burst"></div><div class="turtle"><div class="shell"></div><div class="head"><div class="eye left"></div><div class="eye right"></div><div class="blush left"></div><div class="blush right"></div></div><div class="leg lf"></div><div class="leg rf"></div><div class="leg lb"></div><div class="leg rb"></div><div class="tail"></div></div>`;
       return wrap;
     }
-
-    function renderTurtles(count) {
-      turtleArea.innerHTML = "";
-      for (let i = 0; i < count; i++) {
-        turtleArea.appendChild(createTurtle());
+    function renderTurtles(count){ turtleArea.innerHTML = ""; for(let i=0;i<count;i++) turtleArea.appendChild(createTurtle()); }
+    function sleep(ms){ return new Promise(resolve => setTimeout(resolve, ms)); }
+    function makeStarBurst(wrap){
+      const burst = wrap.querySelector(".star-burst"); burst.innerHTML = ""; burst.style.opacity = "1";
+      const stars = ["⭐","✨","🌟","💛","☀️","✨"];
+      const points = [[-55,-45],[45,-50],[-65,5],[58,6],[-30,48],[35,45]];
+      points.forEach((p,idx)=>{ const span = document.createElement("span"); span.textContent = stars[idx % stars.length]; span.style.setProperty("--x", `${p[0]}px`); span.style.setProperty("--y", `${p[1]}px`); burst.appendChild(span); });
+      setTimeout(()=>{ burst.style.opacity = "0"; burst.innerHTML = ""; }, 900);
+    }
+    function makeConfetti(){
+      const emojis = ["☀️","🌈","✨","⭐","💛","🌤️"];
+      for(let i=0;i<42;i++){
+        const c = document.createElement("div"); c.className = "confetti"; c.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+        c.style.left = Math.random()*100 + "vw"; c.style.animationDelay = Math.random()*0.6 + "s"; c.style.animationDuration = (2.2 + Math.random()*1.5) + "s";
+        confettiLayer.appendChild(c); setTimeout(()=>c.remove(),4200);
       }
     }
-
-    function sleep(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
-    async function startCeremony() {
-      const count = parseInt(turtleCountInput.value, 10);
-
-      if (!count || count < 1) {
-        alert("請輸入至少 1 隻烏龜！");
-        return;
-      }
-
-      if (count > 30) {
-        alert("最多 30 隻就好，不然場面太壯觀啦！");
-        return;
-      }
-
-      isRunning = true;
-      startBtn.disabled = true;
-      turtleCountInput.disabled = true;
-      wishText.textContent = "";
-      sun.classList.remove("show");
-      rainbow.classList.remove("show");
-
-      renderTurtles(count);
-
+    async function startCeremony(){
+      const count = parseInt(turtleCountInput.value,10);
+      if(!count || count < 1){ alert("請輸入至少 1 隻烏龜！"); return; }
+      if(count > 30){ alert("最多 30 隻就好，不然場面太壯觀啦！"); return; }
+      initAudio(); playStartSound();
+      isRunning = true; startBtn.disabled = true; turtleCountInput.disabled = true;
+      wishText.textContent = ""; wishText.classList.remove("pop"); sun.classList.remove("show"); rainbow.classList.remove("show"); stage.classList.remove("sunny"); confettiLayer.innerHTML = "";
+      createRain(); createSkyEffects(false); renderTurtles(count);
       const turtles = [...document.querySelectorAll(".turtle-wrap")];
       status.textContent = `正在召喚晴天中… 共 ${count} 隻烏龜出動！`;
-
-      for (let i = 0; i < turtles.length; i++) {
-        status.textContent = `第 ${i + 1} 隻烏龜祈晴中…`;
-        turtles[i].classList.add("burning");
-        await sleep(650);
-        turtles[i].classList.remove("burning");
-        turtles[i].classList.add("gone");
-        await sleep(260);
+      for(let i=0;i<turtles.length;i++){
+        status.textContent = `第 ${i+1} 隻烏龜正在可愛祈晴…`;
+        playBurnSound(); turtles[i].classList.add("burning"); await sleep(650);
+        turtles[i].classList.remove("burning"); turtles[i].classList.add("gone"); makeStarBurst(turtles[i]); playPoofSound(); await sleep(300);
       }
-
       status.textContent = "祈晴成功！天氣好像要變好了！";
-      wishText.textContent = "拜託後天放晴呀～ ☀️🌈✨";
-      sun.classList.add("show");
-      rainbow.classList.add("show");
-
-      // 雨變少
+      wishText.textContent = "拜託後天放晴呀～ ☀️🌈✨"; wishText.classList.add("pop");
+      sun.classList.add("show"); rainbow.classList.add("show"); stage.classList.add("sunny"); playSuccessSound(); makeConfetti();
       const drops = document.querySelectorAll(".drop");
-      drops.forEach((d, idx) => {
-        setTimeout(() => {
-          d.style.transition = "opacity 0.8s ease";
-          d.style.opacity = "0";
-        }, idx * 6);
-      });
-
-      isRunning = false;
-      startBtn.disabled = false;
-      turtleCountInput.disabled = false;
+      drops.forEach((d,idx)=>{ setTimeout(()=>{ d.style.transition = "opacity .8s ease"; d.style.opacity = "0"; }, idx*6); });
+      createSkyEffects(true);
+      isRunning = false; startBtn.disabled = false; turtleCountInput.disabled = false;
     }
-
-    function resetAll() {
-      if (isRunning) return;
-      turtleArea.innerHTML = "";
-      status.textContent = "輸入數量後按下「開始祈晴」";
-      wishText.textContent = "";
-      sun.classList.remove("show");
-      rainbow.classList.remove("show");
-      createRain();
+    function resetAll(){
+      if(isRunning) return;
+      turtleArea.innerHTML = ""; status.textContent = "輸入數量後按下「開始祈晴」";
+      wishText.textContent = ""; wishText.classList.remove("pop"); sun.classList.remove("show"); rainbow.classList.remove("show"); stage.classList.remove("sunny"); confettiLayer.innerHTML = "";
+      createRain(); createSkyEffects(false); renderTurtles(3);
     }
-
     startBtn.addEventListener("click", startCeremony);
     resetBtn.addEventListener("click", resetAll);
-
-    createRain();
-    renderTurtles(3);
+    createRain(); createSkyEffects(false); renderTurtles(3);
   </script>
 </body>
 </html>
